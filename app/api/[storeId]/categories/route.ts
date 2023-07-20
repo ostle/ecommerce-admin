@@ -23,7 +23,7 @@ export async function POST(
 		}
 
 		if (!billboardId) {
-			return new NextResponse("Billboard id is required", {
+			return new NextResponse("Billboard ID is required", {
 				status: 400,
 			});
 		}
@@ -53,7 +53,7 @@ export async function POST(
 
 		return NextResponse.json(category);
 	} catch (error) {
-		console.log("[CATEGORIES_post]", error);
+		console.log("[CATEGORIES_POST]", error);
 		return new NextResponse("Internal error", { status: 500 });
 	}
 }
