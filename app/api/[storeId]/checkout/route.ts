@@ -71,14 +71,11 @@ export async function POST(
 		const result = await mercadopago.preferences.create({
 			items: line_items,
 			notification_url: `${process.env.HTTPS_LOCALHOST_3000}/api/webhook`,
-			external_reference: order.id,
 			back_urls: {
 				success: "http://localhost:3001/cart?success=1",
 				failure: "http://localhost:3001/cart?canceled=1",
 			},
-			metadata: {
-				orderId: order.id,
-			},
+			external_reference: orderId,
 		} as any);
 
 		const initPoint = result.body.init_point;

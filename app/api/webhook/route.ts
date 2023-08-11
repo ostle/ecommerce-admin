@@ -1,59 +1,57 @@
-import mercadopago, { payment } from "mercadopago";
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
+import mercadopago from "mercadopago";
 import prismadb from "@/lib/prismadb";
 
-const corsHeaders = {
-	"Access-Control-Allow-Origin": "http://localhost:3001",
-	"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-	"Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+// const corsHeaders = {
+// 	"Access-Control-Allow-Origin": "http://localhost:3001",
+// 	"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+// 	"Access-Control-Allow-Headers": "Content-Type, Authorization",
+// };
 
-export async function OPTIONS() {
-	return new NextResponse.json({}, { headers: corsHeaders });
-}
+// export async function OPTIONS() {
+// 	return NextResponse.json({}, { headers: corsHeaders });
+// }
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
 	const access_token = process.env.MP_ACCESS_TOKEN!;
 	mercadopago.configure({
 		access_token: access_token,
 	});
 
 	try {
-		// Obtén los parámetros de la consulta
-		const paymentId = req.query["data.id"] as string;
-		const type = req.query["type"] as string;
+		const body = await req.json();
+		if (body.type === "payment") {
+			const dataId = body.data.id;
+			const paymentInfo = await mercadopago.payment.findById(dataId);
 
-		if (type === "payment" && paymentId) {
-			// Si el tipo es "payment" y hay un ID de pago
-			const data = await mercadopago.payment.findById(paymentId);
-			console.log("Payment data:", data);
-			console.log("Webhook data:", JSON.stringify(data, null, 2));
+			// Obtener el estado y la referencia externa
+			console.log(paymentInfo);
+			const status = paymentInfo.body.status;
+			const externalReference = paymentInfo.body.external_reference;
 
-			if (data.status === "approved") {
-				const orderId = data.external_reference as string;
-				console.log("Updating order with ID:", orderId);
+			console.log("status:", status);
+			console.log("external_reference:", externalReference);
 
-				// Actualiza la orden en tu sistema
-				const updateResult = await prismadb.order.update({
+			if (status === "approved") {
+				const order = await prismadb.order.update({
 					where: {
-						id: orderId,
+						id: externalReference, // Usar la referencia externa como ID
 					},
 					data: {
 						isPaid: true,
 					},
+					include: {
+						orderItems: true,
+					},
 				});
-
-				console.log("Order update result:", updateResult);
-				console.log("Order updated successfully.");
 			}
 		}
 
-		return new NextResponse(null, { status: 200, headers: corsHeaders });
-	} catch (error) {
-		console.error("Error processing MercadoPago webhook:", error);
-		return new NextResponse("Something went wrong", {
-			status: 500,
-			headers: corsHeaders,
+		return new NextResponse(null, { status: 204 });
+	} catch (error: any) {
+		return new NextResponse(`Webhook Error: ${error.message}`, {
+			status: 400,
 		});
 	}
 }

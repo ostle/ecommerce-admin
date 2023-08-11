@@ -1,16 +1,17 @@
-import { Inter } from 'next/font/google';
-import { ClerkProvider } from '@clerk/nextjs';
+import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
-import { ModalProvider } from '@/providers/modal-provider';
-import { ToasterProvider } from '@/providers/toast-provider';
+import { ModalProvider } from "@/providers/modal-provider";
+import { ToasterProvider } from "@/providers/toast-provider";
 
-import './globals.css';
+import "./globals.css";
+import { ThemeProvider } from "@/providers/theme-provider";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: metadata = {
-	title: 'Admin Dashboard',
-	description: 'Admin Dashboard',
+export const metadata = {
+	title: "Admin Dashboard",
+	description: "Admin Dashboard",
 };
 
 export default function RootLayout({
@@ -22,9 +23,15 @@ export default function RootLayout({
 		<ClerkProvider>
 			<html lang='en'>
 				<body className={inter.className}>
-					<ToasterProvider />
-					<ModalProvider />
-					{children}
+					<ThemeProvider
+						attribute='class'
+						defaultTheme='dark'
+						enableSystem
+					>
+						<ToasterProvider />
+						<ModalProvider />
+						{children}
+					</ThemeProvider>
 				</body>
 			</html>
 		</ClerkProvider>
