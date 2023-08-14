@@ -30,40 +30,40 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
 				<Separator />
 				<div className='grid gap-4 grid-cols-3'>
 					<Card>
-						<CardHeader className='flex flex-row items-center justify-center space-y-0 pb-2'>
-							<CardTitle className='text-sm font-medium'>
+						<CardHeader className='flex flex-row items-center  space-y-0 pb-2'>
+							<DollarSign className='h-4 w-4 text-muted-foreground mr-4 t' />
+							<CardTitle className='text-lg font-medium'>
 								Total Revenue
 							</CardTitle>
-							<DollarSign className='h-4 w-4 text-muted-foreground' />
 						</CardHeader>
 						<CardContent>
-							<div className='text-2xl font-bold'>
+							<div className='text-2xl font-bold justify-center'>
 								{formatter.format(totalRevenue)}
 							</div>
 						</CardContent>
 					</Card>
 					<Card>
-						<CardHeader className='flex flex-row items-center justify-center space-y-0  pb-2'>
-							<CardTitle className='text-sm font-medium'>
+						<CardHeader className='flex flex-row items-center  space-y-0  pb-2'>
+							<CreditCardIcon className='h-4 w-4 text-muted-foreground mr-4' />
+							<CardTitle className='text-lg font-medium '>
 								Sales
 							</CardTitle>
-							<CreditCardIcon className='h-4 w-4 text-muted-foreground' />
 						</CardHeader>
 						<CardContent>
-							<div className='text-2xl font-bold'>
+							<div className='text-2xl font-bold justify-center'>
 								+{salesCount}
 							</div>
 						</CardContent>
 					</Card>
 					<Card>
-						<CardHeader className='flex flex-row items-center justify-center space-y-0  pb-2'>
-							<CardTitle className='text-sm font-medium'>
+						<CardHeader className='flex flex-row items-center space-y-0  pb-2'>
+							<Package className='h-4 w-4 text-muted-foreground mr-4' />
+							<CardTitle className='text-lg font-medium'>
 								Products In Stock
 							</CardTitle>
-							<Package className='h-4 w-4 text-muted-foreground' />
 						</CardHeader>
 						<CardContent>
-							<div className='text-2xl font-bold'>
+							<div className='text-2xl font-bold justify-center'>
 								{stockCount}
 							</div>
 						</CardContent>
