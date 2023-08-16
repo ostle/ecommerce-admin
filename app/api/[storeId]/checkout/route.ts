@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
 const corsHeaders = {
-	"Access-Control-Allow-Origin": "https://ecommerce-admin-ostle.vercel.app",
-	"Access-Control-Allow-Methods": "POST, OPTIONS",
+	"Access-Control-Allow-Origin": "https://ecommerce-store-ostle.vercel.app",
+	"Access-Control-Allow-Methods": "GET, OPTIONS",
 	"Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
