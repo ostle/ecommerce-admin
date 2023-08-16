@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 const corsHeaders = {
 	"Access-Control-Allow-Origin":
 		"https://ecommerce-store-pi-seven.vercel.app",
-	"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+	"Access-Control-Allow-Methods": "POST, OPTIONS",
 	"Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
@@ -72,12 +72,12 @@ export async function POST(
 		const result = await mercadopago.preferences.create({
 			items: line_items,
 			notification_url:
-				"https://ecommerce-admin-three-gamma.vercel.app/api/webhook",
+				"https://ecommerce-admin-ostle.vercel.app/api/webhook",
 			back_urls: {
 				success:
-					"https://ecommerce-store-pi-seven.vercel.app/cart?success=1",
+					"https://ecommerce-store-ostle.vercel.app/cart?success=1",
 				failure:
-					"https://ecommerce-store-pi-seven.vercel.app/cart?canceled=1",
+					"https://ecommerce-store-ostle.vercel.app/cart?canceled=1",
 			},
 			external_reference: orderId,
 		} as any);
